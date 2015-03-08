@@ -28,7 +28,6 @@
     [this]
     (rover (:x this) (dec (:y this)) :north)))
 
-
 (defrecord FacingSouth [x y]
   Rotable
   (rotate-left 
@@ -46,7 +45,6 @@
     [this]
     (rover (:x this) (inc (:y this)) :south)))
 
-
 (defrecord FacingEast [x y]
   Rotable
   (rotate-left 
@@ -63,7 +61,6 @@
   (move-backwards 
     [this]
     (rover (dec (:x this)) (:y this) :east)))
-
 
 (defrecord FacingWest [x y]
   Rotable
