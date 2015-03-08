@@ -3,58 +3,100 @@
 (defn rover [x y direction]
   {:x x :y y :direction direction})
 
-(defmulti rotate-left :direction)
+(defprotocol Rotable
+  (left [this])
+  (right [this]))
 
-(defmethod rotate-left :north [{x :x y :y}]
-  (rover x y :west))
+(defprotocol Movable
+  (forwards [this])
+  (backwards [this]))
 
-(defmethod rotate-left :south [{x :x y :y}]
-  (rover x y :east))
+(defrecord FacingNorth [x y]
+  Rotable
+  (left 
+    [this] 
+    (rover (:x this) (:y this) :west))
+  (right 
+    [this] 
+    (rover (:x this) (:y this) :east))
+  
+  Movable
+  (forwards 
+    [this]
+    (rover (:x this) (inc (:y this)) :north))
+  (backwards 
+    [this]
+    (rover (:x this) (dec (:y this)) :north)))
 
-(defmethod rotate-left :east [{x :x y :y}]
-  (rover x y :north))
 
-(defmethod rotate-left :west [{x :x y :y}]
-  (rover x y :south))
+(defrecord FacingSouth [x y]
+  Rotable
+  (left 
+    [this] 
+    (rover (:x this) (:y this) :east))
+  (right 
+    [this] 
+    (rover (:x this) (:y this) :west))
+  
+  Movable
+  (forwards 
+    [this]
+    (rover (:x this) (dec (:y this)) :south))
+  (backwards 
+    [this]
+    (rover (:x this) (inc (:y this)) :south)))
 
-(defmulti rotate-right :direction)
 
-(defmethod rotate-right :north [{x :x y :y}]
-  (rover x y :east))
+(defrecord FacingEast [x y]
+  Rotable
+  (left 
+    [this] 
+    (rover (:x this) (:y this) :north))
+  (right 
+    [this] 
+    (rover (:x this) (:y this) :south))
+  
+  Movable
+  (forwards 
+    [this]
+    (rover (inc (:x this)) (:y this) :east))
+  (backwards 
+    [this]
+    (rover (dec (:x this)) (:y this) :east)))
 
-(defmethod rotate-right :south [{x :x y :y}]
-  (rover x y :west))
 
-(defmethod rotate-right :east [{x :x y :y}]
-  (rover x y :south))
+(defrecord FacingWest [x y]
+  Rotable
+  (left 
+    [this] 
+    (rover (:x this) (:y this) :south))
+  (right 
+    [this] 
+    (rover (:x this) (:y this) :north))
+  
+  Movable
+  (forwards 
+    [this]
+    (rover (dec (:x this)) (:y this) :west))
+  (backwards 
+    [this]
+    (rover (inc (:x this)) (:y this) :west)))
 
-(defmethod rotate-right :west [{x :x y :y}]
-  (rover x y :north))
+(defn oriented-rover [{:keys [x y direction]}]
+  (case direction
+    :north (FacingNorth. x y) 
+    :south (FacingSouth. x y) 
+    :east (FacingEast. x y) 
+    :west (FacingWest. x y)))
 
-(defmulti move-forwards :direction)
+(defn rotate-left [rover]
+  (left (oriented-rover rover)))
 
-(defmethod move-forwards :north [{x :x y :y direction :direction}]
-  (rover x (inc y) direction))
+(defn rotate-right [rover]
+  (right (oriented-rover rover)))
 
-(defmethod move-forwards :south [{x :x y :y direction :direction}]
-  (rover x (dec y) direction))
+(defn move-forwards [rover]
+  (forwards (oriented-rover rover)))
 
-(defmethod move-forwards :east [{x :x y :y direction :direction}]
-  (rover (inc x) y direction))
-
-(defmethod move-forwards :west [{x :x y :y direction :direction}]
-  (rover (dec x) y direction))
-
-(defmulti move-backwards :direction)
-
-(defmethod move-backwards :north [{x :x y :y direction :direction}]
-  (rover x (dec y) direction))
-
-(defmethod move-backwards :south [{x :x y :y direction :direction}]
-  (rover x (inc y) direction))
-
-(defmethod move-backwards :east [{x :x y :y direction :direction}]
-  (rover (dec x) y direction))
-
-(defmethod move-backwards :west [{x :x y :y direction :direction}]
-  (rover (inc x) y direction))
+(defn move-backwards [rover]
+  (backwards (oriented-rover rover)))
