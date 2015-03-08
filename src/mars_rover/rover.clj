@@ -4,81 +4,81 @@
   {:x x :y y :direction direction})
 
 (defprotocol Rotable
-  (left [this])
-  (right [this]))
+  (rotate-left [this])
+  (rotate-right [this]))
 
 (defprotocol Movable
-  (forwards [this])
-  (backwards [this]))
+  (move-forwards [this])
+  (move-backwards [this]))
 
 (defrecord FacingNorth [x y]
   Rotable
-  (left 
+  (rotate-left 
     [this] 
     (rover (:x this) (:y this) :west))
-  (right 
+  (rotate-right 
     [this] 
     (rover (:x this) (:y this) :east))
   
   Movable
-  (forwards 
+  (move-forwards 
     [this]
     (rover (:x this) (inc (:y this)) :north))
-  (backwards 
+  (move-backwards 
     [this]
     (rover (:x this) (dec (:y this)) :north)))
 
 
 (defrecord FacingSouth [x y]
   Rotable
-  (left 
+  (rotate-left 
     [this] 
     (rover (:x this) (:y this) :east))
-  (right 
+  (rotate-right 
     [this] 
     (rover (:x this) (:y this) :west))
   
   Movable
-  (forwards 
+  (move-forwards 
     [this]
     (rover (:x this) (dec (:y this)) :south))
-  (backwards 
+  (move-backwards 
     [this]
     (rover (:x this) (inc (:y this)) :south)))
 
 
 (defrecord FacingEast [x y]
   Rotable
-  (left 
+  (rotate-left 
     [this] 
     (rover (:x this) (:y this) :north))
-  (right 
+  (rotate-right 
     [this] 
     (rover (:x this) (:y this) :south))
   
   Movable
-  (forwards 
+  (move-forwards 
     [this]
     (rover (inc (:x this)) (:y this) :east))
-  (backwards 
+  (move-backwards 
     [this]
     (rover (dec (:x this)) (:y this) :east)))
 
 
 (defrecord FacingWest [x y]
   Rotable
-  (left 
+  (rotate-left 
     [this] 
     (rover (:x this) (:y this) :south))
-  (right 
+  (rotate-right 
     [this] 
     (rover (:x this) (:y this) :north))
   
   Movable
-  (forwards 
+  (move-forwards 
     [this]
     (rover (dec (:x this)) (:y this) :west))
-  (backwards 
+  (move-backwards 
     [this]
     (rover (inc (:x this)) (:y this) :west)))
 
@@ -90,13 +90,13 @@
     :west (FacingWest. x y)))
 
 (defn rotate-left [rover]
-  (left (oriented-rover rover)))
+  (rotate-left (oriented-rover rover)))
 
 (defn rotate-right [rover]
-  (right (oriented-rover rover)))
+  (rotate-right (oriented-rover rover)))
 
 (defn move-forwards [rover]
-  (forwards (oriented-rover rover)))
+  (move-forwards (oriented-rover rover)))
 
 (defn move-backwards [rover]
-  (backwards (oriented-rover rover)))
+  (move-backwards (oriented-rover rover)))
