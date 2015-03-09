@@ -14,70 +14,70 @@
 (defrecord FacingNorth [x y]
   Rotable
   (rotate-left 
-    [this] 
-    (rover (:x this) (:y this) :west))
+    [{:keys [x y]}] 
+    (rover x y :west))
   (rotate-right 
-    [this] 
-    (rover (:x this) (:y this) :east))
+    [{:keys [x y]}] 
+    (rover x y :east))
   
   Movable
   (move-forwards 
-    [this]
-    (rover (:x this) (inc (:y this)) :north))
+    [{:keys [x y]}]
+    (rover x (inc y) :north))
   (move-backwards 
-    [this]
-    (rover (:x this) (dec (:y this)) :north)))
+    [{:keys [x y]}]
+    (rover x (dec y) :north)))
 
 (defrecord FacingSouth [x y]
   Rotable
   (rotate-left 
-    [this] 
-    (rover (:x this) (:y this) :east))
+    [{:keys [x y]}] 
+    (rover x y :east))
   (rotate-right 
-    [this] 
-    (rover (:x this) (:y this) :west))
+    [{:keys [x y]}] 
+    (rover x y :west))
   
   Movable
   (move-forwards 
-    [this]
-    (rover (:x this) (dec (:y this)) :south))
+    [{:keys [x y]}]
+    (rover x (dec y) :south))
   (move-backwards 
-    [this]
-    (rover (:x this) (inc (:y this)) :south)))
+    [{:keys [x y]}]
+    (rover x (inc y) :south)))
 
 (defrecord FacingEast [x y]
   Rotable
   (rotate-left 
-    [this] 
-    (rover (:x this) (:y this) :north))
+    [{:keys [x y]}] 
+    (rover x y :north))
   (rotate-right 
-    [this] 
-    (rover (:x this) (:y this) :south))
+    [{:keys [x y]}] 
+    (rover x y :south))
   
   Movable
   (move-forwards 
-    [this]
-    (rover (inc (:x this)) (:y this) :east))
+    [{:keys [x y]}]
+    (rover (inc x) y :east))
   (move-backwards 
-    [this]
-    (rover (dec (:x this)) (:y this) :east)))
+    [{:keys [x y]}]
+    (rover (dec x) y :east)))
 
 (defrecord FacingWest [x y]
   Rotable
   (rotate-left 
-    [this] 
-    (rover (:x this) (:y this) :south))
+    [{:keys [x y]}] 
+    (rover x y :south))
   (rotate-right 
-    [this] 
-    (rover (:x this) (:y this) :north))
+    [{:keys [x y]}] 
+    (rover x y :north))
   
   Movable
   (move-forwards 
-    [this]
-    (rover (dec (:x this)) (:y this) :west))
+    [{:keys [x y]}]
+    (rover (dec x) y :west))
   (move-backwards 
-    [this]
-    (rover (inc (:x this)) (:y this) :west)))
+    [{:keys [x y]}]
+    (rover (inc x) y :west)))
 
 (defn oriented-rover [{:keys [x y direction]}]
   (case direction
